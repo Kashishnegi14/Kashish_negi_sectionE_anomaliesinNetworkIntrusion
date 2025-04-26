@@ -1,7 +1,3 @@
-Here’s a simplified version without bold text and comments:
-
----
-
 Project Title: Network Intrusion Detection System (NIDS)
 
 Team Members:
