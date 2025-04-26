@@ -1,17 +1,43 @@
-# Network Intrusion Detection System (NIDS)
+Here’s a simplified version without bold text and comments:
 
-A machine learning-based system for detecting network intrusions and suspicious activities.
+---
 
-## Features
+Project Title: Network Intrusion Detection System (NIDS)
 
-- Real-time intrusion detection
-- Machine learning model (Random Forest)
-- Web interface for easy interaction
-- Performance metrics and visualization
+Team Members:
+- Kashish Negi
 
-## Installation
+Short Project Description:
+The Network Intrusion Detection System (NIDS) detects malicious activities and attacks in a network using machine learning. It processes network traffic data and predicts normal or abnormal behaviors.
+
+Technologies Used:
+- Python
+- Scikit-Learn
+- Pandas
+- Flask
+- HTML/CSS/JavaScript
+- SQL
+
+Steps to Run/Execute the Project:
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/nids-project.git
-   cd nids-project
+   https://github.com/Kashishnegi14/Kashish_negi_sectionE_anomaliesinNetworkIntrusion/
+
+2. Navigate to the project directory:
+   `cd NIDS`
+
+3. Create a virtual environment:
+   `python -m venv venv`
+
+4. Install dependencies:
+   `pip install -r requirements.txt`
+
+5. Run the Flask application:
+   `python app.py`
+
+6. Open the browser and go to `http://localhost:5000`
+
+7. Run the machine learning model:
+   `python app.py`
+
+8. Test the application via the dashboard.
