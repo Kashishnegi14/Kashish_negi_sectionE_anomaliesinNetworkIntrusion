@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>NIDS Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header class="main-header">
+        <div class="logo"><i class="fas fa-shield-alt"></i> NIDS Dashboard</div>
+        <div class="header-right">
+          <span class="status-dot"></span>
+          <span>Live Monitoring</span>
+        </div>
+      </header>
+
+      <aside class="sidebar">
+        <div class="nav-item" onclick="navigate('/')">
+          <i class="fas fa-tachometer-alt"></i><span>Dashboard</span>
+        </div>
+        <div class="nav-item" onclick="navigate('/alerts')">
+          <i class="fas fa-bell"></i><span>Alerts</span>
+        </div>
+        <div class="nav-item" onclick="navigate('/analytics')">
+          <i class="fas fa-chart-line"></i><span>Analytics</span>
+        </div>
+        <div class="nav-item" onclick="navigate('/settings')">
+          <i class="fas fa-cog"></i><span>Settings</span>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        {% if page == 'dashboard' %}
+        <h2>🔍 Recent Threat Alerts</h2>
+        <div class="alert-card" onclick="navigate('/threat/1')">
+          <div class="icon"><i class="fas fa-skull-crossbones"></i></div>
+          <div class="info">
+            <h3>Brute Force Attack</h3>
+            <p>Detected multiple failed SSH logins from IP 192.168.1.105</p>
+            <span class="timestamp">Just now</span>
+          </div>
+        </div>
+        <h2>📊 Threat Detection Graph</h2>
+        <div class="chart-container">
+          <canvas id="threatChart" onclick="handleChartClick(event)"></canvas>
+        </div>
+
+        {% elif page == 'alerts' %}
+        <h2>🚨 Active Alerts</h2>
+        <div class="alert-card">
+          <div class="icon"><i class="fas fa-bug"></i></div>
+          <div class="info">
+            <h3>Malware Signature Detected</h3>
+            <p>Inbound traffic flagged with known malware signature</p>
+            <span class="timestamp">5 minutes ago</span>
+          </div>
+        </div>
+
+        {% elif page == 'analytics' %}
+        <h2>📈 Traffic & Intrusion Analytics</h2>
+        <div class="chart-container">
+          <canvas id="analyticsChart"></canvas>
+          <p class="note">
+            This section will display real-time traffic volume, protocol-wise
+            usage, and anomaly detection patterns soon.
+          </p>
+        </div>
+
+        {% elif page == 'settings' %}
+        <h2>⚙️ System Settings</h2>
+        <div class="settings-panel">
+          <p>
+            Configure thresholds, log retention, alert frequency, and other
+            preferences here.
+          </p>
+          <form class="settings-form" method="POST">
+            <div class="form-group">
+              <label for="threshold">Threat Sensitivity Level:</label>
+              <select id="threshold" name="threshold">
+                <option value="low" {% if threshold == 'low' %}selected{% endif %}>Low</option>
+                <option value="medium" {% if threshold == 'medium' %}selected{% endif %}>Medium</option>
+                <option value="high" {% if threshold == 'high' %}selected{% endif %}>High</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="alerts">Alert Frequency (1-10):</label>
+              <input type="range" id="alerts" name="alerts" min="1" max="10" value="{{ alert_frequency }}" />
+            </div>
+
+            <div class="form-group">
+              <label for="logRetention">Log Retention (days):</label>
+              <input type="number" id="logRetention" name="logRetention" value="{{ log_retention }}" />
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn-save">Save Changes</button>
+            </div>
+          </form>
+        </div>
+        {% endif %}
+      </main>
+    </div>
+
+    <script>
+      function navigate(path) {
+        location.replace(path);
+      }
+
+      function handleChartClick(event) {
+        viewDetails("1");
+      }
+
+      function viewDetails(threatId) {
+        window.location.href = `/threat/${threatId}`;
+      }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>

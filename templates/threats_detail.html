@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Threat Details | NIDS</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+      .threat-details {
+        background: rgba(26, 35, 126, 0.8);
+        backdrop-filter: blur(10px);
+        border: 1px solid #536dfe;
+        padding: 2rem;
+        border-radius: 10px;
+        max-width: 800px;
+        margin: 2rem auto;
+      }
+
+      .threat-meta {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .packet-data {
+        font-family: "Courier New", monospace;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 1rem;
+        border-radius: 5px;
+        overflow-x: auto;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard">
+      <header class="header">
+        <div class="logo">
+          <i class="fas fa-shield-alt"></i>
+          <h1>Threat Details</h1>
+        </div>
+      </header>
+
+      <nav class="sidebar">
+        <div class="nav-item" onclick="navigate('/')">
+          <i class="fas fa-arrow-left"></i>
+          <span>Back to Dashboard</span>
+        </div>
+      </nav>
+
+      <main class="main-content">
+        <div class="threat-details">
+          <div class="threat-meta">
+            <div>
+              <h3><i class="fas fa-laptop-code"></i> Source</h3>
+              <p id="threat-source">192.168.1.105 (United States)</p>
+            </div>
+            <div>
+              <h3><i class="fas fa-bullseye"></i> Target</h3>
+              <p id="threat-target">192.168.1.2:22 (SSH)</p>
+            </div>
+            <div>
+              <h3><i class="fas fa-clock"></i> Time</h3>
+              <p id="threat-time">2023-05-15 14:30:45 UTC</p>
+            </div>
+            <div>
+              <h3><i class="fas fa-exclamation-triangle"></i> Severity</h3>
+              <p class="severity high">High (89/100)</p>
+            </div>
+          </div>
+
+          <h2><i class="fas fa-code"></i> Packet Data</h2>
+          <div class="packet-data">
+            4500003c0000400040060000c0a80169c0a801020050001600000000000000005002200000000000000000
+          </div>
+
+          <h2><i class="fas fa-shield-alt"></i> Actions</h2>
+          <div class="action-buttons">
+            <button class="btn" onclick="blockIP()">
+              <i class="fas fa-ban"></i> Block IP
+            </button>
+            <button class="btn" onclick="downloadPCAP()">
+              <i class="fas fa-download"></i> Download PCAP
+            </button>
+            <button class="btn" onclick="navigate('/analytics')">
+              <i class="fas fa-chart-line"></i> View Analytics
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      function navigate(path) {
+        window.location.href = path;
+      }
+
+      function blockIP() {
+        alert("IP blocking would be implemented here");
+        // Actual implementation would call your backend API
+      }
+
+      function downloadPCAP() {
+        alert("PCAP download would start here");
+      }
+    </script>
+  </body>
+</html>

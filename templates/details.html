@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Threat Details</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #0a192f;
+        color: white;
+      }
+
+      /* Navbar styling */
+      .navbar {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background-color: rgba(23, 42, 69, 0.95);
+        padding: 1rem;
+        border-bottom: 1px solid #64ffda;
+        flex-wrap: wrap;
+      }
+
+      .navbar a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        padding: 0.5rem 1rem;
+        transition: color 0.3s;
+      }
+
+      .navbar a:hover {
+        color: #64ffda;
+      }
+
+      .threat-details {
+        background: rgba(23, 42, 69, 0.95);
+        border: 1px solid #64ffda;
+        padding: 2rem;
+        border-radius: 8px;
+        max-width: 800px;
+        margin: 2rem auto;
+      }
+
+      .threat-meta {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .packet-data {
+        font-family: monospace;
+        background: #0a192f;
+        padding: 1rem;
+        overflow-x: auto;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      .action-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+
+      .btn,
+      .btn-small {
+        background-color: #64ffda;
+        color: #0a192f;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .btn-small {
+        font-size: 0.9rem;
+      }
+
+      .hex-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+      <a href="/alerts"><i class="fas fa-bell"></i> Alerts</a>
+      <a href="/analytics"><i class="fas fa-chart-line"></i> Analytics</a>
+      <a href="/logs"><i class="fas fa-database"></i> Logs</a>
+      <a href="/settings"><i class="fas fa-cogs"></i> Settings</a>
+    </div>
+
+    <!-- Main Threat Details -->
+    <div class="dashboard">
+      <div class="threat-details">
+        <h1 id="threat-title">Threat Details</h1>
+
+        <div class="threat-meta">
+          <div>
+            <h3><i class="fas fa-laptop-code"></i> Source</h3>
+            <p id="threat-source">Loading...</p>
+          </div>
+          <div>
+            <h3><i class="fas fa-bullseye"></i> Target</h3>
+            <p id="threat-target">Loading...</p>
+          </div>
+          <div>
+            <h3><i class="fas fa-clock"></i> Time Detected</h3>
+            <p id="threat-time">Loading...</p>
+          </div>
+          <div>
+            <h3><i class="fas fa-exclamation-triangle"></i> Severity</h3>
+            <p id="threat-severity">Loading...</p>
+          </div>
+        </div>
+
+        <div>
+          <div class="hex-header">
+            <h2><i class="fas fa-code"></i> Packet Data</h2>
+            <button class="btn-small" onclick="copyHex()">
+              <i class="fas fa-copy"></i> Copy
+            </button>
+          </div>
+          <div class="packet-data" id="packet-hex">Loading packet data...</div>
+        </div>
+
+        <h2><i class="fas fa-shield-alt"></i> Recommended Actions</h2>
+        <div class="action-buttons">
+          <button class="btn" onclick="blockIP()">
+            <i class="fas fa-ban"></i> Block Source IP
+          </button>
+          <button class="btn" onclick="ignoreThreat()">
+            <i class="fas fa-eye-slash"></i> Mark as False Positive
+          </button>
+          <button class="btn" onclick="downloadPCAP()">
+            <i class="fas fa-download"></i> Download PCAP
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const threatId = window.location.pathname.split("/").pop();
+
+      async function loadThreatDetails() {
+        try {
+          const response = await fetch(`/api/threat/${threatId}`);
+          const data = await response.json();
+
+          document.getElementById("threat-title").textContent = data.type;
+          document.getElementById(
+            "threat-source"
+          ).innerHTML = `${data.src_ip} <small>(${data.geo_info.country})</small>`;
+          document.getElementById("threat-target").innerHTML = `${
+            data.dst_ip
+          }:${data.dst_port} <small>(${data.service || "Unknown"})</small>`;
+          document.getElementById("threat-time").textContent = new Date(
+            data.timestamp
+          ).toLocaleString();
+          document.getElementById(
+            "threat-severity"
+          ).innerHTML = `<span class="severity-${data.severity.toLowerCase()}">${
+            data.severity
+          }</span> (${data.confidence}/100)`;
+
+          const hex = data.packet_data.match(/.{1,2}/g).join(" ");
+          document.getElementById("packet-hex").textContent = hex;
+        } catch (error) {
+          console.error("Failed to load threat details:", error);
+        }
+      }
+
+      async function blockIP() {
+        const ip = document
+          .getElementById("threat-source")
+          .textContent.split(" ")[0];
+        try {
+          await fetch("/api/block", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ip: ip }),
+          });
+          alert(`Successfully blocked ${ip}`);
+        } catch (error) {
+          alert(`Failed to block IP: ${error}`);
+        }
+      }
+
+      function ignoreThreat() {
+        alert(
+          "Marked as false positive (in a real app, this would log to database)"
+        );
+      }
+
+      function downloadPCAP() {
+        alert("PCAP download would start here");
+      }
+
+      function copyHex() {
+        const hex = document.getElementById("packet-hex").textContent;
+        navigator.clipboard.writeText(hex);
+        alert("Copied packet data to clipboard!");
+      }
+
+      loadThreatDetails();
+    </script>
+  </body>
+</html>

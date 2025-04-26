@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Alerts | NIDS</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="dashboard">
+      <!-- Same header/sidebar structure -->
+      <main class="main-content">
+        <h1>All Security Alerts</h1>
+        <!-- List of alerts -->
+        <div class="alert" onclick="navigate('/threat/1')">
+          <!-- Alert content -->
+        </div>
+      </main>
+    </div>
+    <script>
+      function navigate(path) {
+        window.location.href = path;
+      }
+    </script>
+  </body>
+</html>
