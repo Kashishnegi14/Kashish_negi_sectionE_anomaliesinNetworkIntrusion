@@ -1,11 +1,11 @@
 Project Title: Network Intrusion Detection System (NIDS)
 
-Team Members:
-- Kashish Negi
+Team Member: Kashish Negi
 
 Short Project Description:
 The Network Intrusion Detection System (NIDS) detects malicious activities and attacks in a network using machine learning. It processes network traffic data and predicts normal or abnormal behaviors.
 
+LINK OF VIDEO EXPLANANTION : https://drive.google.com/file/d/16uqHMlLWNNATcbE761KgJPsCIsYvG0Cg/view?usp=drivesdk
 Technologies Used:
 - Python
 - Scikit-Learn
@@ -13,6 +13,7 @@ Technologies Used:
 - Flask
 - HTML/CSS/JavaScript
 - SQL
+  
 
 Steps to Run/Execute the Project:
 
