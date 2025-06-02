@@ -3,7 +3,8 @@
 A machine learning-based web application to detect network intrusions in real time. This project helps identify various types of attacks such as DoS, Probe, R2L, and U2R using a trained classification model. The system also features a user-friendly dashboard for uploading traffic data, visualizing threats, and monitoring alerts.
 
 ---
-
+🎥 Project Video
+▶️ https://drive.google.com/file/d/16uqHMlLWNNATcbE761KgJPsCIsYvG0Cg/view?usp=drivesdk
 ## 📌 Features
 
 - ✅ Upload network traffic datasets in CSV format
